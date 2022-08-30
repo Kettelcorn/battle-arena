@@ -11,12 +11,14 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody rb;
     private Vector3 movement;
     private int jumpTracker;
+    private Animator anim;
 
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         jumpTracker = 1;
+        anim = GetComponentInChildren<Animator>();
     }
 
     // Update is called once per frame
@@ -26,7 +28,10 @@ public class PlayerMovement : MonoBehaviour
         float x = Input.GetAxis("Horizontal");
         float z = Input.GetAxis("Vertical");
         movement = new Vector3(x, 0, z);
-        transform.Translate(movement * speed * Time.deltaTime);
+
+        //rotate player to face direction it is moving
+        transform.LookAt(movement + transform.position);
+        transform.Translate(movement * speed * Time.deltaTime, Space.World);
 
         // allows player to jump and double jump
         if (Input.GetButtonDown("Jump") && jumpTracker < 2)
@@ -34,6 +39,7 @@ public class PlayerMovement : MonoBehaviour
             rb.velocity = new Vector3(0, jumpSpeed, 0);
             jumpTracker++;
         }
+
     }
 
     // resets jump tracker upon collision with ground
