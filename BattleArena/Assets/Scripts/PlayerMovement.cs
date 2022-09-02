@@ -42,28 +42,30 @@ public class PlayerMovement : MonoBehaviour
             jumpTracker++;
         }
 
+        //checks if player is grounded and moving to start run animtion
         if (x != 0 || z != 0 && anim.GetBool("isGrounded"))
             Run(x, z);
-
     }
 
+    // sets running animtion based on movement vector
     private void Run(float x, float z)
     {
         anim.SetBool("isRunning", true);
         anim.SetFloat("Blend", Math.Abs(x) + Math.Abs(z));
     }
 
+    // jumping animation
     private void Jump()
     {
         anim.SetTrigger("isJumping");
         anim.SetBool("isGrounded", false);
     }
 
+    // landing animtions
     private void Land()
     {
         anim.SetBool("isGrounded", true);
     }
-
 
     // resets jump tracker upon collision with ground
     private void OnCollisionEnter(Collision collision)
