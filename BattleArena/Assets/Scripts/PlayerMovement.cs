@@ -5,18 +5,21 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] private GameObject player;
-    [SerializeField] private float speed;
+    [SerializeField] private float walkSpeed;
+    [SerializeField] private float runSpeed;
     [SerializeField] private float jumpSpeed;
 
     private Rigidbody rb;
     private Vector3 movement;
     private int jumpTracker;
+    private float speed;
 
     private Animator anim;
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         jumpTracker = 1;
+        speed = walkSpeed;
         anim = GetComponent<Animator>();
         Debug.Log(anim);
     }
@@ -31,7 +34,17 @@ public class PlayerMovement : MonoBehaviour
         if (movement.x != 0 || movement.z != 0)
         {
             anim.SetBool("isWalking", true);
-            Debug.Log("Should be walking");
+
+            if (Input.GetKey("left shift"))
+            {
+                anim.SetBool("isRunning", true);
+                if (jumpTracker == 0) speed = runSpeed;
+            }
+            else
+            {
+                anim.SetBool("isRunning", false);
+                if (jumpTracker == 0) speed = walkSpeed;
+            }
         }
         else anim.SetBool("isWalking", false);
 
