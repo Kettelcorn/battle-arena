@@ -46,7 +46,11 @@ public class PlayerMovement : MonoBehaviour
                 if (jumpTracker == 0) speed = walkSpeed;
             }
         }
-        else anim.SetBool("isWalking", false);
+        else
+        {
+            anim.SetBool("isWalking", false);
+            anim.SetBool("isRunning", false);
+        }
 
         transform.LookAt(movement + transform.position);
         transform.Translate(movement * speed * Time.deltaTime, Space.World);
