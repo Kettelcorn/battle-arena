@@ -11,14 +11,12 @@ public class PlayerMovement : MonoBehaviour
 
     private Rigidbody rb;
     private Vector3 movement;
-    private int jumpTracker;
     private float speed;
 
     private Animator anim;
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        jumpTracker = 1;
         speed = walkSpeed;
         anim = GetComponent<Animator>();
         Debug.Log(anim);
@@ -38,12 +36,12 @@ public class PlayerMovement : MonoBehaviour
             if (Input.GetKey("left shift"))
             {
                 anim.SetBool("isRunning", true);
-                if (jumpTracker == 0) speed = runSpeed;
+                if (anim.GetBool("isGrounded")) speed = runSpeed;
             }
             else
             {
                 anim.SetBool("isRunning", false);
-                if (jumpTracker == 0) speed = walkSpeed;
+                if (anim.GetBool("isGrounded")) speed = walkSpeed;
             }
         }
         else
@@ -55,10 +53,11 @@ public class PlayerMovement : MonoBehaviour
         transform.LookAt(movement + transform.position);
         transform.Translate(movement * speed * Time.deltaTime, Space.World);
 
-        if (Input.GetButtonDown("Jump") && jumpTracker < 2)
+        if (Input.GetButtonDown("Jump"))
         {
             rb.velocity = new Vector3(0, jumpSpeed, 0);
-            jumpTracker++;
+            anim.SetBool("isGrounded", false);
+            anim.SetTrigger("isJumping");
         }
     }
 
@@ -66,7 +65,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Ground"))
         {
-            jumpTracker = 0;
+            anim.SetBool("isGrounded", true);
         }
     }
 } 
