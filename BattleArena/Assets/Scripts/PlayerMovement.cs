@@ -8,6 +8,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float walkSpeed;
     [SerializeField] private float runSpeed;
     [SerializeField] private float jumpSpeed;
+    [SerializeField] private float rotateSpeed;
 
     private Rigidbody rb;
     private Vector3 movement;
@@ -25,13 +26,16 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float x = Input.GetAxis("Horizontal");
-        float z = Input.GetAxis("Vertical");
-        movement = new Vector3(x, 0, z);
+        
+        movement = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+
+        transform.Translate(movement * speed * Time.deltaTime, Space.World);
+        
 
         if (movement.x != 0 || movement.z != 0)
         {
             anim.SetBool("isWalking", true);
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(movement), rotateSpeed);
 
             if (Input.GetKey("left shift"))
             {
@@ -50,14 +54,13 @@ public class PlayerMovement : MonoBehaviour
             anim.SetBool("isRunning", false);
         }
 
-        transform.LookAt(movement + transform.position);
-        transform.Translate(movement * speed * Time.deltaTime, Space.World);
 
-        if (Input.GetButtonDown("Jump"))
+        if (Input.GetButtonDown("Jump") && anim.GetBool("isGrounded"))
         {
-            rb.velocity = new Vector3(0, jumpSpeed, 0);
             anim.SetBool("isGrounded", false);
             anim.SetTrigger("isJumping");
+            //rb.AddForce(0, jumpSpeed, 0);
+            rb.velocity = new Vector3(0, jumpSpeed, 0);
         }
     }
 
@@ -66,6 +69,14 @@ public class PlayerMovement : MonoBehaviour
         if (collision.gameObject.CompareTag("Ground"))
         {
             anim.SetBool("isGrounded", true);
+        }
+    }
+
+    private void OnCollistionExit(Collision collision)
+    {
+        if (!collision.gameObject.CompareTag("Ground"))
+        {
+            anim.SetBool("isGrounded", false);
         }
     }
 } 
