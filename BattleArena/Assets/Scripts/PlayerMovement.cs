@@ -9,6 +9,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float runSpeed;
     [SerializeField] private float jumpSpeed;
     [SerializeField] private float rotateSpeed;
+    [SerializeField] private float acc;
 
     private Rigidbody rb;
     private Vector3 movement;
@@ -21,7 +22,7 @@ public class PlayerMovement : MonoBehaviour
         speed = walkSpeed;
         anim = GetComponent<Animator>();
         Debug.Log(anim);
-        Cursor.lockState = CursorLockMode.Locked;
+        //Cursor.lockState = CursorLockMode.Locked;
     }
 
     // Update is called once per frame
@@ -35,23 +36,29 @@ public class PlayerMovement : MonoBehaviour
 
         if (movement.x != 0 || movement.z != 0)
         {
-            anim.SetBool("isWalking", true);
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(movement), rotateSpeed);
+            float blend = Mathf.Min(Mathf.Abs(movement.x) + Mathf.Abs(movement.z), 1);
+            anim.SetFloat("Blend", blend);
 
             if (Input.GetKey("left shift"))
             {
                 anim.SetBool("isRunning", true);
-                if (anim.GetBool("isGrounded")) speed = runSpeed;
+                if (anim.GetBool("isGrounded"))
+                {
+                    anim.SetFloat("Blend", blend);
+                    if (speed < runSpeed && anim.GetBool("isGrounded"))
+                    speed += speed * Time.fixedDeltaTime * acc;
+                }
             }
             else
             {
                 anim.SetBool("isRunning", false);
-                if (anim.GetBool("isGrounded")) speed = walkSpeed;
+                if (speed > walkSpeed && anim.GetBool("isGrounded"))
+                    speed -= speed * Time.fixedDeltaTime * acc;
             }
         }
         else
         {
-            anim.SetBool("isWalking", false);
             anim.SetBool("isRunning", false);
         }
 
@@ -60,8 +67,12 @@ public class PlayerMovement : MonoBehaviour
         {
             anim.SetBool("isGrounded", false);
             anim.SetTrigger("isJumping");
-            //rb.AddForce(0, jumpSpeed, 0);
             rb.velocity = new Vector3(0, jumpSpeed, 0);
+        }
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            anim.SetTrigger("isPunching");
         }
     }
 
