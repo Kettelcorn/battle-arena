@@ -101,4 +101,20 @@ public class PlayerMovement : MonoBehaviour
             anim.SetBool("isGrounded", false);
         }
     }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (anim.GetCurrentAnimatorStateInfo(0).IsName("Hook Punch") &&
+            anim.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.5) 
+        {
+            float rotation = transform.localEulerAngles.y;
+            float xSpeed = 0;
+            float zSpeed = 0;
+            if (rotation >= -90 && rotation <= 90)
+            {
+                xSpeed = rotation;
+            }
+            other.attachedRigidbody.AddForce(new Vector3(xSpeed, 0, zSpeed)); 
+        }
+    }
 } 
