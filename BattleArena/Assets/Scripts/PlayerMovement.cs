@@ -10,11 +10,14 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float jumpSpeed;
     [SerializeField] private float rotateSpeed;
     [SerializeField] private float acc;
+    [SerializeField] private float dmgMulti;
+    [SerializeField] private float vertKnock;
 
     private Rigidbody rb;
     private Vector3 movement;
     private float speed;
     private Animator anim;
+    private bool hitStatus;
 
     void Start()
     {
@@ -105,16 +108,39 @@ public class PlayerMovement : MonoBehaviour
     private void OnTriggerStay(Collider other)
     {
         if (anim.GetCurrentAnimatorStateInfo(0).IsName("Hook Punch") &&
-            anim.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.5) 
+            anim.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.5 &&
+            hitStatus != true)
+                
         {
             float rotation = transform.localEulerAngles.y;
             float xSpeed = 0;
             float zSpeed = 0;
-            if (rotation >= -90 && rotation <= 90)
+
+            if (rotation <= 90)
             {
                 xSpeed = rotation;
+                zSpeed = (rotation - 90) * -1;
             }
-            other.attachedRigidbody.AddForce(new Vector3(xSpeed, 0, zSpeed)); 
+            else if (rotation <= 180)
+            {
+                xSpeed = (rotation - 180) * -1;
+                zSpeed = (rotation - 90) * -1;
+            }
+            else if (rotation <= 270)
+            {
+                xSpeed = (rotation - 180) * -1;
+                zSpeed = rotation - 270;
+            }
+            else
+            {
+                xSpeed = rotation - 360;
+                zSpeed = rotation - 270; 
+            }
+
+            other.attachedRigidbody.AddForce(new Vector3(xSpeed * dmgMulti, vertKnock * dmgMulti, zSpeed * dmgMulti));
+            hitStatus = true;
         }
+        if (!anim.GetCurrentAnimatorStateInfo(0).IsName("Hook Punch"))
+            hitStatus = false;
     }
 } 
