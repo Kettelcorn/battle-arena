@@ -19,6 +19,8 @@ public class PlayerMovement : MonoBehaviour
     private Animator anim;
     private bool hitStatus;
 
+    public bool punched;
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -109,9 +111,9 @@ public class PlayerMovement : MonoBehaviour
     {
         if (anim.GetCurrentAnimatorStateInfo(0).IsName("Hook Punch") &&
             anim.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.5 &&
-            hitStatus != true)
-                
+            hitStatus != true)      
         {
+            punched = true;
             float rotation = transform.localEulerAngles.y;
             float xSpeed = 0;
             float zSpeed = 0;
@@ -138,6 +140,7 @@ public class PlayerMovement : MonoBehaviour
             }
 
             other.attachedRigidbody.AddForce(new Vector3(xSpeed * dmgMulti, vertKnock * dmgMulti, zSpeed * dmgMulti));
+            other.gameObject.GetComponent<Enemy>().anim.SetTrigger("isPunched");
             hitStatus = true;
         }
         if (!anim.GetCurrentAnimatorStateInfo(0).IsName("Hook Punch"))
