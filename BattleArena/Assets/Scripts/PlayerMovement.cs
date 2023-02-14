@@ -5,6 +5,8 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] private GameObject player;
+    [SerializeField] private GameObject volleyballPrefab;
+
     [SerializeField] private float walkSpeed;
     [SerializeField] private float runSpeed;
     [SerializeField] private float jumpSpeed;
@@ -12,6 +14,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float acc;
     [SerializeField] private float dmgMulti;
     [SerializeField] private float vertKnock;
+    [SerializeField] private float projectileSpeed;
+    [SerializeField] private float spawnDistance;
 
     private Rigidbody rb;
     private Vector3 movement;
@@ -85,8 +89,20 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetMouseButtonDown(0) && anim.GetBool("isGrounded") &&
             !anim.GetCurrentAnimatorStateInfo(0).IsName("Hook Punch"))
         {
+            movement = new Vector3(0, 0, 0);
+            rb.velocity = new Vector3(0, 0, 0);
             anim.SetTrigger("isPunching");
         }   
+
+        if (Input.GetMouseButtonDown(1))
+        {
+            Vector3 startingPosition = new Vector3(transform.position.x + transform.forward.x * spawnDistance,
+                transform.position.y + 1, transform.position.z + transform.forward.z * spawnDistance);
+
+            GameObject volleyball = Instantiate(volleyballPrefab, startingPosition, transform.rotation);
+
+            volleyball.GetComponent<Rigidbody>().velocity = transform.forward * projectileSpeed;
+        }
     }
 
     // On contact with the ground, set isGrounded to true 
