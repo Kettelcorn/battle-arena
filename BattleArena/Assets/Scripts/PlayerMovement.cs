@@ -96,14 +96,23 @@ public class PlayerMovement : MonoBehaviour
 
         if (Input.GetMouseButtonDown(1))
         {
-            Vector3 startingPosition = new Vector3(transform.position.x + transform.forward.x * spawnDistance,
-                transform.position.y + 1, transform.position.z + transform.forward.z * spawnDistance);
-
-            GameObject volleyball = Instantiate(volleyballPrefab, startingPosition, transform.rotation);
-
-            Vector3 shoot = new Vector3(transform.forward.x * projectileSpeed, 4, transform.forward.z * projectileSpeed);
-            volleyball.GetComponent<Rigidbody>().velocity = shoot;
+            anim.SetTrigger("isMagic");
+            StartCoroutine(delay());
         }
+
+    }
+
+    IEnumerator delay()
+    {
+        yield return new WaitForSeconds(1.4f);
+        Vector3 startingPosition = new Vector3(transform.position.x + transform.forward.x * spawnDistance,
+            transform.position.y + 1, transform.position.z + transform.forward.z * spawnDistance);
+
+        GameObject volleyball = Instantiate(volleyballPrefab, startingPosition, transform.rotation);
+
+        Vector3 shoot = new Vector3(transform.forward.x * projectileSpeed, 4, transform.forward.z * projectileSpeed);
+        volleyball.GetComponent<Rigidbody>().velocity = shoot;
+
     }
 
     // On contact with the ground, set isGrounded to true 
