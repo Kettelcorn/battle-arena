@@ -258,7 +258,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 47ba668771130504b8c2f87c6b034ceb, type: 3}
       propertyPath: m_RootOrder
-      value: 7
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 47ba668771130504b8c2f87c6b034ceb, type: 3}
       propertyPath: m_LocalScale.x
@@ -1007,6 +1007,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 1733353286}
+  moveSpeed: 3
+  rotateSpeed: 0.04
   anim: {fileID: 0}
 --- !u!1 &963194225
 GameObject:
@@ -1216,8 +1218,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1138371341}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.1350343, y: 0.1946311, z: -1.2711902}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 1.135, y: 0.1946311, z: -1.2711902}
+  m_LocalScale: {x: 2.9829, y: 1, z: 4.1285}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 2
@@ -1498,7 +1500,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 1733353286}
-  volleyballPrefab: {fileID: 6325991971101406548, guid: 3536bf6d415edff4d98c84b1b67866e7, type: 3}
+  volleyballPrefab: {fileID: 4487485803518496835, guid: 86e90648668a2f8498b0e06888d7e644, type: 3}
   walkSpeed: 5
   runSpeed: 10
   jumpSpeed: 4
@@ -1816,5 +1818,5 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

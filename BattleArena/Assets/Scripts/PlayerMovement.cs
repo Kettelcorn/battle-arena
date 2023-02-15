@@ -101,7 +101,8 @@ public class PlayerMovement : MonoBehaviour
 
             GameObject volleyball = Instantiate(volleyballPrefab, startingPosition, transform.rotation);
 
-            volleyball.GetComponent<Rigidbody>().velocity = transform.forward * projectileSpeed;
+            Vector3 shoot = new Vector3(transform.forward.x * projectileSpeed, 4, transform.forward.z * projectileSpeed);
+            volleyball.GetComponent<Rigidbody>().velocity = shoot;
         }
     }
 
