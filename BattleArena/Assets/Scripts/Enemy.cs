@@ -27,12 +27,14 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        if (timer < 3)
+        if (timer < 1)
         {
             timer += Time.deltaTime;
         } 
-        else if (timer < 6)
+        else if (timer < 3)
         {
+            anim.SetBool("isMoving", false);
+            Debug.Log("should be still");
             timer += Time.deltaTime;
             moveSpeed = 0;
             
@@ -43,6 +45,9 @@ public class Enemy : MonoBehaviour
             randomX = Random.Range(-1f, 1f);
             randomZ = Random.Range(-1f, 1f);
             moveSpeed = tempSpeed;
+            anim.SetTrigger("startMove");
+            anim.SetBool("isMoving", true);
+            Debug.Log("should be moving");
         }
 
         movement = new Vector3(randomX, 0, randomZ);

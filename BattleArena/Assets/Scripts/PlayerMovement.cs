@@ -6,6 +6,9 @@ public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] private GameObject player;
     [SerializeField] private GameObject volleyballPrefab;
+    [SerializeField] private GameObject firePrefab;
+    [SerializeField] private GameObject firePosition;
+
 
     [SerializeField] private float walkSpeed;
     [SerializeField] private float runSpeed;
@@ -17,11 +20,13 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float projectileSpeed;
     [SerializeField] private float spawnDistance;
 
+    private GameObject flame;
     private Rigidbody rb;
     private Vector3 movement;
     private float speed;
     private Animator anim;
     private bool hitStatus;
+    private bool jetFire;
 
     public bool punched;
 
@@ -85,6 +90,24 @@ public class PlayerMovement : MonoBehaviour
             rb.velocity = new Vector3(0, jumpSpeed, 0);
         }
 
+        if (Input.GetKey(KeyCode.Space) && !anim.GetBool("isGrounded"))
+        {
+            if (!jetFire)
+            {
+                Transform flamePoint = transform.Find("firePosition");
+                flame = Instantiate(firePrefab, firePosition.transform.position, Quaternion.Euler(180f, 0f, 0f), flamePoint);
+                jetFire = true;
+            }
+
+            rb.AddForce(Vector3.up * 2f, ForceMode.Force);
+
+        }
+        else
+        {
+            Destroy(flame);
+            jetFire = false;
+        }
+
         // If player inputs to punch, trigger punching animation
         if (Input.GetMouseButtonDown(0) && anim.GetBool("isGrounded") &&
             !anim.GetCurrentAnimatorStateInfo(0).IsName("Hook Punch"))
@@ -101,6 +124,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
     }
+
 
     IEnumerator delay()
     {
