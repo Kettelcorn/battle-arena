@@ -27,11 +27,11 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        if (timer < 1)
+        if (timer < 3)
         {
             timer += Time.deltaTime;
         } 
-        else if (timer < 3)
+        else if (timer < 6)
         {
             anim.SetBool("isMoving", false);
             Debug.Log("should be still");
